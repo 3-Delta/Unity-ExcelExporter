@@ -1,2 +1,2 @@
 # Unity-ExcelExporter
-excel表格导出工具，导出支持json,lua,bytes,sqlite,原生代码
+Excel表格导出工具,支持导出json,lua,bytes,sqlite,原生代码
