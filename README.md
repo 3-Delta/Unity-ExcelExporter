@@ -8,9 +8,11 @@
 
 进度: 0%
 
-准备参考：
-https://github.com/kaclok/HiExcel2Protobuf
-https://github.com/kaclok/FlashExcel
-https://github.com/yimengfan/BDFramework.Core
-https://github.com/kaclok/Excel-Translator
-https://github.com/monkey256/ExcelExport
+准备参考：   
+1. https://github.com/kaclok/HiExcel2Protobuf    
+2. https://github.com/kaclok/FlashExcel    
+3. https://github.com/yimengfan/BDFramework.Core   
+4. https://github.com/kaclok/Excel-Translator    
+5. https://github.com/monkey256/ExcelExport    
+6. https://github.com/xieliujian/Excel2Unity  
+7. https://github.com/sniper00/ExcelExport
