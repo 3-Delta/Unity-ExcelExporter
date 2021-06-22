@@ -6,4 +6,16 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.Data.Sqlite">
+      <HintPath>Resources\Dll\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Resources\Dll\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SVN">
+      <HintPath>Resources\Dll\SVN.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
