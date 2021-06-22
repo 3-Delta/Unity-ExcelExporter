@@ -48,3 +48,11 @@
 /Tools/SVN/obj/*.targets
 /Tools/SVN/obj/*.cache
 /Tools/ExcelExporter/.vs/ExcelExporter/DesignTimeBuild/*.v2
+/Tools/SVN/bin/Release/netcoreapp3.1/*.json
+/Tools/SVN/bin/Release/netcoreapp3.1/*.dll
+/Tools/SVN/bin/Release/netcoreapp3.1/*.pdb
+/Tools/SVN/obj/Release/netcoreapp3.1/*.cs
+/Tools/SVN/obj/Release/netcoreapp3.1/*.cache
+/Tools/SVN/obj/Release/netcoreapp3.1/*.txt
+/Tools/SVN/obj/Release/netcoreapp3.1/*.dll
+/Tools/SVN/obj/Release/netcoreapp3.1/*.pdb

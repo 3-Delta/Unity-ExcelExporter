@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace SVN {
+namespace SVNProcess {
     // 处理SVN
     public class SVNHelper {
         public static string workDirectory { get; set; } = null;
