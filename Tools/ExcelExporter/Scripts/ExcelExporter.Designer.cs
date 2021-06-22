@@ -46,6 +46,7 @@ namespace ExcelExporter {
             this.BtnRefreshList = new System.Windows.Forms.Button();
             this.BtnExcelPath = new System.Windows.Forms.Button();
             this.TextExcelPath = new System.Windows.Forms.TextBox();
+            this.BtnExport = new System.Windows.Forms.Button();
             this.GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +61,7 @@ namespace ExcelExporter {
             // 
             // BtnSVNRevert
             // 
-            this.BtnSVNRevert.Location = new System.Drawing.Point(526, 528);
+            this.BtnSVNRevert.Location = new System.Drawing.Point(489, 528);
             this.BtnSVNRevert.Name = "BtnSVNRevert";
             this.BtnSVNRevert.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNRevert.TabIndex = 1;
@@ -70,7 +71,7 @@ namespace ExcelExporter {
             // 
             // BtnSVNUpdate
             // 
-            this.BtnSVNUpdate.Location = new System.Drawing.Point(650, 528);
+            this.BtnSVNUpdate.Location = new System.Drawing.Point(585, 528);
             this.BtnSVNUpdate.Name = "BtnSVNUpdate";
             this.BtnSVNUpdate.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNUpdate.TabIndex = 2;
@@ -80,7 +81,7 @@ namespace ExcelExporter {
             // 
             // BtnSVNCommit
             // 
-            this.BtnSVNCommit.Location = new System.Drawing.Point(775, 528);
+            this.BtnSVNCommit.Location = new System.Drawing.Point(681, 528);
             this.BtnSVNCommit.Name = "BtnSVNCommit";
             this.BtnSVNCommit.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNCommit.TabIndex = 3;
@@ -102,6 +103,7 @@ namespace ExcelExporter {
             this.OutPutText.Location = new System.Drawing.Point(489, 0);
             this.OutPutText.Multiline = true;
             this.OutPutText.Name = "OutPutText";
+            this.OutPutText.ReadOnly = true;
             this.OutPutText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.OutPutText.Size = new System.Drawing.Size(412, 323);
             this.OutPutText.TabIndex = 5;
@@ -156,7 +158,7 @@ namespace ExcelExporter {
             this.BtnServerPath.Name = "BtnServerPath";
             this.BtnServerPath.Size = new System.Drawing.Size(63, 25);
             this.BtnServerPath.TabIndex = 10;
-            this.BtnServerPath.Text = "设置";
+            this.BtnServerPath.Text = "路径";
             this.BtnServerPath.UseVisualStyleBackColor = true;
             this.BtnServerPath.Click += new System.EventHandler(this.BtnServerPath_Click);
             // 
@@ -260,11 +262,26 @@ namespace ExcelExporter {
             this.TextExcelPath.TabIndex = 12;
             this.TextExcelPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextExcelPath_KeyDown);
             // 
+            // BtnExport
+            // 
+            this.BtnExport.BackColor = System.Drawing.Color.Black;
+            this.BtnExport.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnExport.BackgroundImage")));
+            this.BtnExport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BtnExport.Font = new System.Drawing.Font("Microsoft YaHei UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.BtnExport.Location = new System.Drawing.Point(803, 526);
+            this.BtnExport.Name = "BtnExport";
+            this.BtnExport.Size = new System.Drawing.Size(90, 40);
+            this.BtnExport.TabIndex = 14;
+            this.BtnExport.Text = "导出";
+            this.BtnExport.UseVisualStyleBackColor = false;
+            this.BtnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
             // ExcelExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 567);
+            this.Controls.Add(this.BtnExport);
             this.Controls.Add(this.BtnExcelPath);
             this.Controls.Add(this.TextExcelPath);
             this.Controls.Add(this.BtnRefreshList);
@@ -313,6 +330,7 @@ namespace ExcelExporter {
         private System.Windows.Forms.Button BtnRefreshList;
         private System.Windows.Forms.Button BtnExcelPath;
         private System.Windows.Forms.TextBox TextExcelPath;
+        private System.Windows.Forms.Button BtnExport;
     }
 }
 

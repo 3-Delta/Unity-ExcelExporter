@@ -57,3 +57,4 @@
 /Tools/SVN/obj/Release/netcoreapp3.1/*.dll
 /Tools/SVN/obj/Release/netcoreapp3.1/*.pdb
 /Tools/ExcelExporter/obj/Debug/netcoreapp3.1/*.CopyComplete
+/Tools/ExcelExporter/obj/Debug/netcoreapp3.1/TempPE

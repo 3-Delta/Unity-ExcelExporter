@@ -1,17 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace ExcelExporter {
     public partial class ExcelExporter : Form {
+        public static readonly string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+        public string ExcelFullPath { get; private set; } = null;
+        public string ExcelListFullPath {
+            get {
+                return string.Format("{0}/ToExportTableList.json", ExcelFullPath);
+            }
+        }
+        public string ServerOutputFullPath { get; private set; } = null;
+        public string ClientOutputFullPath { get; private set; } = null;
+
         public ExcelExporter() {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.OnInited();
+        }
+
+        private void OnInited() {
+            OutPutText.Text = Environment.CurrentDirectory + "\n        " + 
+                Directory.GetCurrentDirectory() + "\n       " + 
+                Application.StartupPath + "\n       " + 
+                Application.ExecutablePath;
         }
 
         private void SVNRevert_Click(object sender, EventArgs e) {
@@ -31,7 +45,22 @@ namespace ExcelExporter {
         }
 
         private void BtnServerPath_Click(object sender, EventArgs e) {
+            //using (OpenFileDialog ofd = new OpenFileDialog()) {
+            //    ofd.Title = "选择文件";
+            //    ofd.InitialDirectory = Desktop + "\\combats\\modals";
+            //    ofd.Filter = fileFliter;
+            //    ofd.AddExtension = true;//自动添加后缀名
+            //    ofd.CheckFileExists = true;//如果是用户手写文件名，那么如果不存在需要警告
 
+            //    if (ofd.ShowDialog() == DialogResult.OK)//如果就是说手写的文件名不存在，就会自动退出到（ ofd.ShowDialog() == DialogResult.CANCEL）
+            //    {
+            //        g_dt = readExcel(ofd.FileName, true);
+            //        if (g_dt == null) {
+            //            return;
+            //        }
+            //        showInForm();
+            //    }
+            //}
         }
 
         private void BtnClientPath_Click(object sender, EventArgs e) {
@@ -55,6 +84,25 @@ namespace ExcelExporter {
         }
 
         private void BtnExcelPath_Click(object sender, EventArgs e) {
+            //using (OpenFileDialog ofd = new OpenFileDialog()) {
+            //    ofd.Title = "选择文件";
+            //    ofd.InitialDirectory = Desktop + "\\combats\\modals";
+            //    ofd.Filter = fileFliter;
+            //    ofd.AddExtension = true;//自动添加后缀名
+            //    ofd.CheckFileExists = true;//如果是用户手写文件名，那么如果不存在需要警告
+
+            //    if (ofd.ShowDialog() == DialogResult.OK)//如果就是说手写的文件名不存在，就会自动退出到（ ofd.ShowDialog() == DialogResult.CANCEL）
+            //    {
+            //        g_dt = readExcel(ofd.FileName, true);
+            //        if (g_dt == null) {
+            //            return;
+            //        }
+            //        showInForm();
+            //    }
+            //}
+        }
+
+        private void BtnExport_Click(object sender, EventArgs e) {
 
         }
     }

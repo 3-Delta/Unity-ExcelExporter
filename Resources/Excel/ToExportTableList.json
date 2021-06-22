@@ -1,0 +1,38 @@
+[
+
+  {
+    "CSVName": "CSVAI.xlsx",
+    "SheetName": "CSVAI",
+    "ExportName": "CSVAI"
+  },
+  {
+    "CSVName": "CSVAudio.xlsx",
+    "SheetName": "CSVAudio",
+    "ExportName": "CSVAudio"
+  },
+  {
+    "CSVName": "CSVCard.xlsx",
+    "SheetName": "CSVCard",
+    "ExportName": "CSVCard"
+  },
+  {
+    "CSVName": "CSVEntity.xlsx",
+    "SheetName": "CSVEntity",
+    "ExportName": "CSVEntity"
+  },
+  {
+    "CSVName": "CSVEntity.xlsx",
+    "SheetName": "CSVPlayer",
+    "ExportName": "CSVPlayer"
+  },
+  {
+    "CSVName": "CSVNPC.xlsx",
+    "SheetName": "CSVNPC",
+    "ExportName": "CSVNPC"
+  },
+  {
+    "CSVName": "CSVFuncOpen.xlsx",
+    "SheetName": "CSVFuncOpen",
+    "ExportName": "CSVFuncOpen"
+  }
+]

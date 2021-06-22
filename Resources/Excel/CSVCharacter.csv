@@ -1,5 +1,0 @@
-CSVFormIntIdName,CSVFormIntIdName,,,,
-id,怪物名,怪物路径,aiID,animatorID,collisionType
-id,name,prefabPath,aiID,animatorID,collisionType
-uint,string,string,uint,uint,int
-1,追击怪,Scene/Prefab/Enemy/ToonSoldiers_infantry,1,1,1
