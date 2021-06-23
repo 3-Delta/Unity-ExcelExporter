@@ -36,4 +36,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="构建后处理&#xD;&#xA;$(SolutionDir)PostBuild.bat $(SolutionDir)$(TargetFileName) $(TargetPath)" />
+  </Target>
+
 </Project>
