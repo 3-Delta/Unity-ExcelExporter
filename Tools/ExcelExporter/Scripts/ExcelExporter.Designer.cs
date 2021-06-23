@@ -47,6 +47,9 @@ namespace ExcelExporter {
             this.BtnExcelPath = new System.Windows.Forms.Button();
             this.TextExcelPath = new System.Windows.Forms.TextBox();
             this.BtnExport = new System.Windows.Forms.Button();
+            this.SelectedSheetList = new System.Windows.Forms.TextBox();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
+            this.ProgressText = new System.Windows.Forms.Label();
             this.GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,13 +58,13 @@ namespace ExcelExporter {
             this.CSVListView.HideSelection = false;
             this.CSVListView.Location = new System.Drawing.Point(5, 94);
             this.CSVListView.Name = "CSVListView";
-            this.CSVListView.Size = new System.Drawing.Size(464, 464);
+            this.CSVListView.Size = new System.Drawing.Size(464, 489);
             this.CSVListView.TabIndex = 0;
             this.CSVListView.UseCompatibleStateImageBehavior = false;
             // 
             // BtnSVNRevert
             // 
-            this.BtnSVNRevert.Location = new System.Drawing.Point(489, 528);
+            this.BtnSVNRevert.Location = new System.Drawing.Point(511, 536);
             this.BtnSVNRevert.Name = "BtnSVNRevert";
             this.BtnSVNRevert.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNRevert.TabIndex = 1;
@@ -71,7 +74,7 @@ namespace ExcelExporter {
             // 
             // BtnSVNUpdate
             // 
-            this.BtnSVNUpdate.Location = new System.Drawing.Point(585, 528);
+            this.BtnSVNUpdate.Location = new System.Drawing.Point(623, 536);
             this.BtnSVNUpdate.Name = "BtnSVNUpdate";
             this.BtnSVNUpdate.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNUpdate.TabIndex = 2;
@@ -81,7 +84,7 @@ namespace ExcelExporter {
             // 
             // BtnSVNCommit
             // 
-            this.BtnSVNCommit.Location = new System.Drawing.Point(681, 528);
+            this.BtnSVNCommit.Location = new System.Drawing.Point(733, 536);
             this.BtnSVNCommit.Name = "BtnSVNCommit";
             this.BtnSVNCommit.Size = new System.Drawing.Size(90, 30);
             this.BtnSVNCommit.TabIndex = 3;
@@ -93,19 +96,19 @@ namespace ExcelExporter {
             // 
             this.ListVScrollBar.Location = new System.Drawing.Point(466, 94);
             this.ListVScrollBar.Name = "ListVScrollBar";
-            this.ListVScrollBar.Size = new System.Drawing.Size(17, 464);
+            this.ListVScrollBar.Size = new System.Drawing.Size(17, 489);
             this.ListVScrollBar.TabIndex = 4;
             // 
             // OutPutText
             // 
             this.OutPutText.BackColor = System.Drawing.SystemColors.WindowText;
             this.OutPutText.ForeColor = System.Drawing.Color.Lime;
-            this.OutPutText.Location = new System.Drawing.Point(489, 0);
+            this.OutPutText.Location = new System.Drawing.Point(733, 0);
             this.OutPutText.Multiline = true;
             this.OutPutText.Name = "OutPutText";
             this.OutPutText.ReadOnly = true;
             this.OutPutText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.OutPutText.Size = new System.Drawing.Size(412, 323);
+            this.OutPutText.Size = new System.Drawing.Size(352, 294);
             this.OutPutText.TabIndex = 5;
             // 
             // FilterText
@@ -138,7 +141,7 @@ namespace ExcelExporter {
             this.GroupBox.Controls.Add(this.ServerCheckedListBox);
             this.GroupBox.Location = new System.Drawing.Point(489, 329);
             this.GroupBox.Name = "GroupBox";
-            this.GroupBox.Size = new System.Drawing.Size(412, 193);
+            this.GroupBox.Size = new System.Drawing.Size(584, 193);
             this.GroupBox.TabIndex = 9;
             this.GroupBox.TabStop = false;
             // 
@@ -146,9 +149,9 @@ namespace ExcelExporter {
             // 
             this.BtnClientPath.Location = new System.Drawing.Point(6, 153);
             this.BtnClientPath.Name = "BtnClientPath";
-            this.BtnClientPath.Size = new System.Drawing.Size(63, 25);
+            this.BtnClientPath.Size = new System.Drawing.Size(80, 25);
             this.BtnClientPath.TabIndex = 11;
-            this.BtnClientPath.Text = "设置";
+            this.BtnClientPath.Text = "路径设置";
             this.BtnClientPath.UseVisualStyleBackColor = true;
             this.BtnClientPath.Click += new System.EventHandler(this.BtnClientPath_Click);
             // 
@@ -156,33 +159,33 @@ namespace ExcelExporter {
             // 
             this.BtnServerPath.Location = new System.Drawing.Point(6, 69);
             this.BtnServerPath.Name = "BtnServerPath";
-            this.BtnServerPath.Size = new System.Drawing.Size(63, 25);
+            this.BtnServerPath.Size = new System.Drawing.Size(80, 25);
             this.BtnServerPath.TabIndex = 10;
-            this.BtnServerPath.Text = "路径";
+            this.BtnServerPath.Text = "路径设置";
             this.BtnServerPath.UseVisualStyleBackColor = true;
             this.BtnServerPath.Click += new System.EventHandler(this.BtnServerPath_Click);
             // 
             // ClientOutputPath
             // 
-            this.ClientOutputPath.Location = new System.Drawing.Point(75, 153);
+            this.ClientOutputPath.Location = new System.Drawing.Point(96, 153);
             this.ClientOutputPath.Name = "ClientOutputPath";
-            this.ClientOutputPath.Size = new System.Drawing.Size(337, 23);
+            this.ClientOutputPath.Size = new System.Drawing.Size(482, 23);
             this.ClientOutputPath.TabIndex = 5;
             this.ClientOutputPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ClientOutputPath_KeyDown);
             // 
             // ServerOutputPath
             // 
             this.ServerOutputPath.AccessibleDescription = "";
-            this.ServerOutputPath.Location = new System.Drawing.Point(75, 69);
+            this.ServerOutputPath.Location = new System.Drawing.Point(96, 69);
             this.ServerOutputPath.Name = "ServerOutputPath";
-            this.ServerOutputPath.Size = new System.Drawing.Size(337, 23);
+            this.ServerOutputPath.Size = new System.Drawing.Size(482, 23);
             this.ServerOutputPath.TabIndex = 4;
             this.ServerOutputPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ServerOutputPath_KeyDown);
             // 
             // Client
             // 
             this.Client.AutoSize = true;
-            this.Client.Location = new System.Drawing.Point(13, 116);
+            this.Client.Location = new System.Drawing.Point(22, 119);
             this.Client.Name = "Client";
             this.Client.Size = new System.Drawing.Size(47, 17);
             this.Client.TabIndex = 3;
@@ -191,7 +194,7 @@ namespace ExcelExporter {
             // Server
             // 
             this.Server.AutoSize = true;
-            this.Server.Location = new System.Drawing.Point(13, 32);
+            this.Server.Location = new System.Drawing.Point(22, 35);
             this.Server.Name = "Server";
             this.Server.Size = new System.Drawing.Size(47, 17);
             this.Server.TabIndex = 2;
@@ -209,17 +212,19 @@ namespace ExcelExporter {
             "Bytes",
             "C#",
             "C++"});
-            this.ClientCheckedListBox.Location = new System.Drawing.Point(75, 107);
+            this.ClientCheckedListBox.Location = new System.Drawing.Point(96, 107);
             this.ClientCheckedListBox.MultiColumn = true;
             this.ClientCheckedListBox.Name = "ClientCheckedListBox";
-            this.ClientCheckedListBox.Size = new System.Drawing.Size(394, 40);
+            this.ClientCheckedListBox.Size = new System.Drawing.Size(482, 40);
             this.ClientCheckedListBox.TabIndex = 1;
             // 
             // ServerCheckedListBox
             // 
             this.ServerCheckedListBox.CheckOnClick = true;
+            this.ServerCheckedListBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.ServerCheckedListBox.FormattingEnabled = true;
             this.ServerCheckedListBox.HorizontalScrollbar = true;
+            this.ServerCheckedListBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.ServerCheckedListBox.Items.AddRange(new object[] {
             "Lua",
             "Json",
@@ -227,10 +232,11 @@ namespace ExcelExporter {
             "Bytes",
             "C#",
             "C++"});
-            this.ServerCheckedListBox.Location = new System.Drawing.Point(75, 22);
+            this.ServerCheckedListBox.Location = new System.Drawing.Point(96, 22);
             this.ServerCheckedListBox.MultiColumn = true;
             this.ServerCheckedListBox.Name = "ServerCheckedListBox";
-            this.ServerCheckedListBox.Size = new System.Drawing.Size(394, 40);
+            this.ServerCheckedListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.ServerCheckedListBox.Size = new System.Drawing.Size(482, 40);
             this.ServerCheckedListBox.TabIndex = 0;
             // 
             // BtnRefreshList
@@ -267,20 +273,51 @@ namespace ExcelExporter {
             this.BtnExport.BackColor = System.Drawing.Color.Black;
             this.BtnExport.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnExport.BackgroundImage")));
             this.BtnExport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.BtnExport.Font = new System.Drawing.Font("Microsoft YaHei UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BtnExport.Location = new System.Drawing.Point(803, 526);
+            this.BtnExport.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.BtnExport.Location = new System.Drawing.Point(926, 528);
             this.BtnExport.Name = "BtnExport";
-            this.BtnExport.Size = new System.Drawing.Size(90, 40);
+            this.BtnExport.Size = new System.Drawing.Size(125, 55);
             this.BtnExport.TabIndex = 14;
             this.BtnExport.Text = "导出";
             this.BtnExport.UseVisualStyleBackColor = false;
             this.BtnExport.Click += new System.EventHandler(this.BtnExport_Click);
             // 
+            // SelectedSheetList
+            // 
+            this.SelectedSheetList.BackColor = System.Drawing.SystemColors.WindowText;
+            this.SelectedSheetList.ForeColor = System.Drawing.Color.Lime;
+            this.SelectedSheetList.Location = new System.Drawing.Point(495, 0);
+            this.SelectedSheetList.Multiline = true;
+            this.SelectedSheetList.Name = "SelectedSheetList";
+            this.SelectedSheetList.ReadOnly = true;
+            this.SelectedSheetList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.SelectedSheetList.Size = new System.Drawing.Size(232, 294);
+            this.SelectedSheetList.TabIndex = 15;
+            // 
+            // ProgressBar
+            // 
+            this.ProgressBar.Location = new System.Drawing.Point(495, 304);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(572, 22);
+            this.ProgressBar.TabIndex = 16;
+            // 
+            // ProgressText
+            // 
+            this.ProgressText.AutoSize = true;
+            this.ProgressText.Location = new System.Drawing.Point(997, 307);
+            this.ProgressText.Name = "ProgressText";
+            this.ProgressText.Size = new System.Drawing.Size(0, 17);
+            this.ProgressText.TabIndex = 17;
+            this.ProgressText.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // ExcelExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 567);
+            this.ClientSize = new System.Drawing.Size(1085, 585);
+            this.Controls.Add(this.ProgressText);
+            this.Controls.Add(this.ProgressBar);
+            this.Controls.Add(this.SelectedSheetList);
             this.Controls.Add(this.BtnExport);
             this.Controls.Add(this.BtnExcelPath);
             this.Controls.Add(this.TextExcelPath);
@@ -331,6 +368,9 @@ namespace ExcelExporter {
         private System.Windows.Forms.Button BtnExcelPath;
         private System.Windows.Forms.TextBox TextExcelPath;
         private System.Windows.Forms.Button BtnExport;
+        private System.Windows.Forms.TextBox SelectedSheetList;
+        private System.Windows.Forms.ProgressBar ProgressBar;
+        private System.Windows.Forms.Label ProgressText;
     }
 }
 

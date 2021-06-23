@@ -1,7 +1,9 @@
+:: batch命令
+
 @echo off
 
-set curPath=%cd%
-echo %curPath%.\
+set curPath=%~dp0
 
-:: .\PostBuild.bat %curPath%
-pause
+echo curPath: %curPath%
+
+pause 

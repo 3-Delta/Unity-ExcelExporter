@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="构建后处理&#xD;&#xA;$(SolutionDir)PostBuild.bat $(SolutionDir)$(TargetFileName) $(TargetPath)" />
+    <Exec Command="构建后处理&#xD;&#xA;$(SolutionDir)MakeShortcut.bat $(TargetDir)$(ProjectName).exe $(SolutionDir)$(ProjectName).exe" />
   </Target>
 
 </Project>
