@@ -89,3 +89,4 @@
 /Tools/ExcelParser/obj/ExcelParser.csproj.nuget.g.targets
 /Tools/ExcelParser/obj/project.assets.json
 /Tools/ExcelParser/obj/project.nuget.cache
+/Tools/ExcelParser/.vs/ExcelParser/DesignTimeBuild/*.v2

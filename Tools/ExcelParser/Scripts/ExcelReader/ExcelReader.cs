@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace ExcelParser {
-    public class ExcelHelper {
-        public static readonly string[] builtinTypeNames = new string[] { "int", "uint" };
-    }
-
     [System.Flags]
     public enum EFieldIniType {
         None,  // 全部不导出
@@ -18,10 +16,53 @@ namespace ExcelParser {
         ToEnum,  // 导出枚举
     }
 
+    public enum ERowType {
+        Note = 0, // 注释
+        Ini = 1, // 导出配置
+        FieldName = 2, // 字段名
+        FieldType = 3, // 类型
+    }
+
     // 表格字段
     public class Field {
-        public string name;
-        public string type;
+        #region 辅助函数
+        public const string ArrayExt = "_array";
+        public static readonly List<string> BuiltinTypes = new List<string>() {
+            "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong",
+            "bool", // 多个bool会使用int/byte/short等进行包装，因为一个bool其实占据一个byte的内存容量
+            "float", // 其实是千分比的uint数值，为了帧同步
+            "string"
+        };
+
+        public static bool IsBuiltin(string type) {
+            return BuiltinTypes.Contains(type);
+        }
+        public static bool IsCellArray(string type) {
+            return type.EndsWith(ArrayExt);
+        }
+        public static string GetType(string fieldName, out bool isCellArray) {
+            isCellArray = IsCellArray(fieldName);
+            if (isCellArray) {
+                return fieldName.Substring(0, fieldName.Length - ArrayExt.Length);
+            } else {
+                return fieldName;
+            }
+        }
+        #endregion
+
+        public string name; // 例如：id, strDesc
+        public string type; // 例如： int, int_array
+
+        public bool isTypeArray {
+            get {
+                return IsCellArray(this.type);
+            }
+        }
+        public string realType {
+            get {
+                return GetType(this.type, out bool isCellArray);
+            }
+        }
 
         public int beginIndex;
         public int endIndex;
@@ -35,41 +76,23 @@ namespace ExcelParser {
         }
     }
 
-    public class SheetReader {
-        public enum ERowType {
-            Note = 1, // 注释
-            Ini = 2, // 导出配置
-            FieldName = 3, // 字段名
-            FieldType = 4, // 类型
-        }
+    public class Sheet {
+        public readonly string filePath;
+        public readonly string sheetName;
 
-        public static void ReadSheets(IList<(string fileFullPath, string sheetName)> list) {
-            for (int i = 0, length = list.Count; i < length; ++i) {
-                ReadSheet(list[i].fileFullPath, list[i].sheetName);
+        public readonly StringBuilder loger = new StringBuilder();
+        public readonly DynamicSheetLine dynamicSheet = new DynamicSheetLineOfCSharp();
+
+        public Field id {
+            get {
+                return this.fields[0];
             }
         }
+        public readonly List<Field> fields = new List<Field>();
 
-        public static void ReadSheet(string fileFullPath, string sheetName) {
-            string fileExt = Path.GetExtension(fileFullPath).ToLower();
-            using (FileStream fileStream = new FileStream(fileFullPath, FileMode.Open, FileAccess.Read)) {
-                IWorkbook workbook;
-
-                if (fileExt == ".xlsx") {
-                    workbook = new XSSFWorkbook(fileStream);
-                } else if (fileExt == ".xls") {
-                    workbook = new HSSFWorkbook(fileStream);
-                } else {
-                    workbook = null;
-                }
-
-                ISheet sheet = workbook.GetSheet(sheetName);
-                if (sheet != null) {
-                    bool rlt = ReadSheetHeader(fileFullPath, sheet, out List<Field> fieldList);
-                    ReadSheetLine(fileFullPath, sheet, fieldList);
-                } else {
-                    Loger.Print(string.Format("{0}文件 不存在名为{1}的sheet", fileFullPath, sheetName));
-                }
-            }
+        public Sheet(string filePath, string sheetName) {
+            this.filePath = filePath;
+            this.sheetName = sheetName;
         }
 
         public static string GetCellValue(ICell cell) {
@@ -95,76 +118,129 @@ namespace ExcelParser {
             return value;
         }
 
-        private static bool ReadSheetHeader(string fileFullPath, ISheet sheet, out List<Field> fieldList) {
-            fieldList = new List<Field>();
+        public bool HasField(string fieldName, string fieldType, out int index) {
+            index = -1;
+            for (int i = 0, length = this.fields.Count; i < length; ++i) {
+                if (this.fields[i].name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)) {
+                    index = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Read() {
+            string ext = Path.GetExtension(this.filePath).ToLower();
+            // FileShare.Read会存在：已经打开的文件不能被本进程访问的问题
+            using (FileStream fileStream = new FileStream(this.filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                IWorkbook workbook;
+                if (ext == ".xlsx") {
+                    workbook = new XSSFWorkbook(fileStream);
+                } else if (ext == ".xls") {
+                    workbook = new HSSFWorkbook(fileStream);
+                } else {
+                    workbook = null;
+                }
+
+                if (workbook != null) {
+                    ISheet sheet = workbook.GetSheet(this.sheetName);
+                    if (sheet != null) {
+                        this.ReadHeader(sheet);
+                        this.CorrectHeader();
+                        this.GenerateDynamicSheet();
+                        this.ReadLine(sheet);
+                    } else {
+                        Loger.Print(string.Format("{0}不存在名为{1}的sheet", this.filePath, this.sheetName));
+                    }
+                } else {
+                    Loger.Print(string.Format("{0}不是excel文件t", this.filePath));
+                }
+            }
+        }
+
+        private bool ReadHeader(ISheet sheet) {
             if (sheet != null && sheet.LastRowNum >= (int)ERowType.FieldType) {
                 #region 字段名
-                IRow row = sheet.GetRow((int)ERowType.FieldName);
-                int colCount = row.LastCellNum;
-                string[] cellValues = new string[colCount];
+                void ReadFieldName() {
+                    IRow row = sheet.GetRow((int)ERowType.FieldName);
+                    int colCount = row.LastCellNum;
+                    string[] cellValues = new string[colCount];
 
-                for (int i = 0, length = colCount; i < length; ++i) {
-                    ICell cell = row.GetCell(i);
-                    cellValues[i] = GetCellValue(cell);
-                }
-
-                if (cellValues[0] != "id") {
-                    Loger.Print(string.Format("FileName:{0} sheetName{1} row{2} col{3} 不是id", fileFullPath, sheet.SheetName, (int)ERowType.FieldName, 0));
-                }
-
-                string preFieldName = null;
-                int beginIndex = 0;
-                for (int i = 0, length = cellValues.Length; i < length; ++i) {
-                    if (cellValues[i] == preFieldName) {
-                        fieldList[fieldList.Count - 1].endIndex = i;
-                    } else {
-                        Field field = new Field();
-                        field.name = cellValues[i];
-                        field.beginIndex = beginIndex;
-                        field.endIndex = i;
-
-                        fieldList.Add(field);
-
-                        preFieldName = cellValues[i];
+                    for (int i = 0, length = colCount; i < length; ++i) {
+                        ICell cell = row.GetCell(i);
+                        cellValues[i] = GetCellValue(cell);
                     }
-                    beginIndex = i + 1;
+
+                    if (cellValues[0] != "id") {
+                        Loger.Print(string.Format("FilePath:{0} sheetName:{1} row:{2} col:{3} 不是id", this.filePath, sheet.SheetName, (int)ERowType.FieldName, 0));
+                    }
+
+                    string preFieldName = null;
+                    int beginIndex = 0;
+                    for (int i = 0, length = cellValues.Length; i < length; ++i) {
+                        if (cellValues[i] == preFieldName) {
+                            this.fields[this.fields.Count - 1].endIndex = i;
+                        } else {
+                            Field field = new Field();
+                            field.name = cellValues[i];
+                            field.beginIndex = beginIndex;
+                            field.endIndex = i;
+
+                            this.fields.Add(field);
+
+                            preFieldName = cellValues[i];
+                        }
+                        beginIndex = i + 1;
+                    }
                 }
+
+                ReadFieldName();
                 #endregion
 
                 #region 字段类型
-                row = sheet.GetRow((int)ERowType.FieldType);
-                for (int i = 0, length = fieldList.Count; i < length; ++i) {
-                    int cellIndex = fieldList[i].beginIndex;
-                    ICell cell = row.GetCell(cellIndex);
-                    if (cell != null) {
-                        fieldList[i].type = GetCellValue(cell);
-                    } else {
-                        Loger.Print(string.Format("FileName:{0} sheetName{1} row{2} col{3} 类型有误", fileFullPath, sheet.SheetName, (int)ERowType.FieldType, cellIndex));
+                void ReadFieldType() {
+                    IRow row = sheet.GetRow((int)ERowType.FieldType);
+                    for (int i = 0, length = this.fields.Count; i < length; ++i) {
+                        int cellIndex = this.fields[i].beginIndex;
+                        ICell cell = row.GetCell(cellIndex);
+                        if (cell != null) {
+                            this.fields[i].type = GetCellValue(cell);
+                        } else {
+                            // 填写了name, 但是没有填写type
+                            Loger.Print(string.Format("FilePath:{0} sheetName:{1} row:{2} col:{3} 类型有误", this.filePath, sheet.SheetName, (int)ERowType.FieldType, cellIndex));
+                        }
                     }
                 }
+
+                ReadFieldType();
                 #endregion
 
                 #region 字段ini
-                row = sheet.GetRow((int)ERowType.Ini);
-                for (int i = 0, length = fieldList.Count; i < length; ++i) {
-                    int cellIndex = fieldList[i].beginIndex;
-                    ICell cell = row.GetCell(cellIndex);
+                void ReadFieldIni() {
+                    IRow row = sheet.GetRow((int)ERowType.Ini);
+                    for (int i = 0, length = this.fields.Count; i < length; ++i) {
+                        int cellIndex = this.fields[i].beginIndex;
+                        ICell cell = row.GetCell(cellIndex);
 
-                    EFieldIniType iniType = EFieldIniType.None;
-                    if (cell != null) {
-                        string v = GetCellValue(cell);
-                        if (v.Contains("e")) {
-                            iniType |= EFieldIniType.ToEnum;
+                        EFieldIniType iniType = EFieldIniType.None;
+                        if (cell != null) {
+                            string v = GetCellValue(cell);
+                            if (v.Contains("e")) {
+                                iniType |= EFieldIniType.ToEnum;
+                            }
+                            if (v.Contains("c")) {
+                                iniType |= EFieldIniType.Client;
+                            }
+                            if (v.Contains("s")) {
+                                iniType |= EFieldIniType.Server;
+                            }
                         }
-                        if (v.Contains("c")) {
-                            iniType |= EFieldIniType.Client;
-                        }
-                        if (v.Contains("s")) {
-                            iniType |= EFieldIniType.Server;
-                        }
+                        this.fields[i].iniType = iniType;
                     }
-                    fieldList[i].iniType = iniType;
                 }
+
+                ReadFieldIni();
+
                 #endregion
 
                 #region 字段继承
@@ -173,15 +249,39 @@ namespace ExcelParser {
                 return true;
             }
 
-            Loger.Print(string.Format("FileName:{0} sheetName{1} 行数至少要{2}行", fileFullPath, sheet.SheetName, (int)ERowType.FieldType));
+            Loger.Print(string.Format("FilePath:{0} sheetName:{1} 行数至少要{2}行", this.filePath, sheet.SheetName, (int)ERowType.FieldType));
             return false;
         }
 
-        private static void ReadSheetLine(string fileFullPath, ISheet sheet, List<Field> fieldList) {
+        private void CorrectHeader() {
+            if ((this.id.iniType & EFieldIniType.ToEnum) == EFieldIniType.ToEnum) {
+                // id导出枚举
+                if (this.HasField("idEnumName", "string", out int index)) {
+                    // 如果id标识为导出为枚举，但是没有类型为string的idEnumName字段，那么就矫正id不导出枚举
+                } else {
+                    this.id.iniType &= (~EFieldIniType.ToEnum);
+                }
+            }
+        }
+
+        private void GenerateDynamicSheet() {
+            List<Field> tmp = new List<Field>(this.fields);
+            int index;
+            if (this.HasField("isEnable", "bool", out index)) {
+                tmp.RemoveAt(index);
+            }
+            if (this.HasField("idEnumName", "string", out index)) {
+                tmp.RemoveAt(index);
+            }
+            this.dynamicSheet.GenerateBody(this.sheetName, tmp);
+            //this.dynamicSheet.ToString();
+        }
+
+        private void ReadLine(ISheet sheet) {
             for (int i = (int)ERowType.FieldType, length = sheet.LastRowNum; i < length; ++i) {
                 IRow row = sheet.GetRow(i);
-                for (int ii = 0, lengthII = fieldList.Count; ii < lengthII; ++ii) {
-                    Field field = fieldList[ii];
+                for (int ii = 0, lengthII = this.fields.Count; ii < lengthII; ++ii) {
+                    Field field = this.fields[ii];
                     for (int iii = field.beginIndex, lengthIII = field.endIndex + 1; iii < lengthIII; ++iii) {
                         ICell cell = row.GetCell(iii);
                         string v = GetCellValue(cell);
@@ -190,6 +290,53 @@ namespace ExcelParser {
                 int colCount = row.LastCellNum;
                 string[] cellValues = new string[colCount];
             }
+        }
+    }
+
+    public class DynamicSheet {
+        public virtual string bodyFormat { get; }
+    }
+
+    public abstract class DynamicSheetLine {
+        public const string ClassSerializable = "System.Serializable";
+        public const string ClassTitleBegin = "public class {0} ";
+        public const string BeginBracket = "{";
+        public const string ClassInheritTitleBegin = "public class {0} /*: FormBase<{1}>*/{";
+        public const string ClassSingleField = "    public readonly {0} {1};";
+        public const string Class1DArrayField = "    public readonly List<{0}> {1};";
+        // 为什么不用 【】数组呢？因为表达不出复杂二维数组的结构
+        public const string Class2DArrayField = "    public readonly List<List<{0}>> {1};";
+        public const string EndBracket = "}";
+
+        protected readonly StringBuilder stringBuilder = new StringBuilder();
+
+        public string body {
+            get {
+                return stringBuilder.ToString();
+            }
+        }
+
+        public abstract DynamicSheetLine GenerateBody(string sheetName, List<Field> fields, int alignmentLevel = 0);
+
+        public virtual void Write(IList<string> exportTypes) {
+            for (int i = 0, length = exportTypes.Count; i < length; ++i) {
+            }
+        }
+
+    }
+
+    public class SheetReader {
+
+
+        public static void ReadSheets(IList<(string fileFullPath, string sheetName)> list) {
+            for (int i = 0, length = list.Count; i < length; ++i) {
+                ReadSheet(list[i].fileFullPath, list[i].sheetName);
+            }
+        }
+
+        public static void ReadSheet(string fileFullPath, string sheetName) {
+            Sheet sh = new Sheet(fileFullPath, sheetName);
+            sh.Read();
         }
     }
 }
