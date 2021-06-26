@@ -81,7 +81,7 @@ namespace ExcelParser {
         public readonly string sheetName;
 
         public readonly StringBuilder loger = new StringBuilder();
-        public readonly DynamicSheetLine dynamicSheet = new DynamicSheetLineOfCSharp();
+        public readonly DynamicSheetLine dynamicSheet = new CSharpDynamicSheetLine();
 
         public Field id {
             get {
@@ -295,18 +295,51 @@ namespace ExcelParser {
 
     public class DynamicSheet {
         public virtual string bodyFormat { get; }
+
+        #region Json
+        public virtual void FromJson() { }
+        public virtual void ToJson() { }
+        #endregion
+
+        #region Lua
+        public virtual void FromLua() { }
+        public virtual void ToLua() { }
+        #endregion
+
+        #region Binray
+        public virtual void FromBinary() { }
+        public virtual void ToBinary() { }
+        #endregion
+
+        #region Sqlite
+        public virtual void FromSqlite() { }
+        public virtual void ToSqlite() { }
+        #endregion
+
+        #region CSharp
+        public virtual void FromCSharp() { }
+        public virtual void ToCSharp() { }
+        #endregion
+
+        #region Cpp
+        public virtual void FromCpp() { }
+        public virtual void ToCpp() { }
+        #endregion
     }
 
     public abstract class DynamicSheetLine {
-        public const string ClassSerializable = "System.Serializable";
-        public const string ClassTitleBegin = "public class {0} ";
         public const string BeginBracket = "{";
-        public const string ClassInheritTitleBegin = "public class {0} /*: FormBase<{1}>*/{";
-        public const string ClassSingleField = "    public readonly {0} {1};";
-        public const string Class1DArrayField = "    public readonly List<{0}> {1};";
-        // 为什么不用 【】数组呢？因为表达不出复杂二维数组的结构
-        public const string Class2DArrayField = "    public readonly List<List<{0}>> {1};";
         public const string EndBracket = "}";
+
+        public abstract string ClassSerializable { get; }
+        public abstract string ClassTitle { get; }
+
+        public abstract string ClassInheritTitleBegin { get; }
+        public abstract string ClassSingleField { get; }
+        public abstract string Class1DArrayField { get; }
+        public abstract string Class2DArrayField { get; }
+        public abstract string ClassCtorTitle { get; }
+        public abstract string ClassFieldAssignment { get; }
 
         protected readonly StringBuilder stringBuilder = new StringBuilder();
 
@@ -326,8 +359,6 @@ namespace ExcelParser {
     }
 
     public class SheetReader {
-
-
         public static void ReadSheets(IList<(string fileFullPath, string sheetName)> list) {
             for (int i = 0, length = list.Count; i < length; ++i) {
                 ReadSheet(list[i].fileFullPath, list[i].sheetName);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ExcelParser {
-    public class BytesWriter {
+    public class JsonOperator {
 
     }
 }

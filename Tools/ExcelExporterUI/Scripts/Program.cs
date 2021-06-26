@@ -11,7 +11,7 @@ namespace ExcelExporter {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ExcelExporter());
+            Application.Run(new ExcelExporterUI());
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ExcelParser {
-    public class SqliteWriter {
+    public class LuaOperator {
 
     }
 }

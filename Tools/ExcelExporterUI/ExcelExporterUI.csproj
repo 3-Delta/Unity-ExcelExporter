@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Data.Sqlite">
-      <HintPath>Resources\Dll\Microsoft.Data.Sqlite.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Resources\Dll\Newtonsoft.Json.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
     <Reference Include="SVN">
       <HintPath>Resources\Dll\SVN.dll</HintPath>
       <Private>false</Private>

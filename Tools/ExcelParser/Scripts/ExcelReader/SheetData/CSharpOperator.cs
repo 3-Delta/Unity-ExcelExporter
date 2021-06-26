@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExcelReader {
-    public class CSharpWriter {
+namespace ExcelParser {
+    public class CSharpOperator {
 
     }
 }
