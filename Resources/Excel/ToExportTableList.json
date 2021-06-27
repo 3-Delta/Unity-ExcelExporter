@@ -1,38 +1,38 @@
 [
 
   {
-    "CSVName": "CSVAI.xlsx",
-    "SheetName": "CSVAI",
-    "ExportName": "CSVAI"
+    "CSVName": "FormAI.xlsx",
+    "SheetName": "FormAI",
+    "ExportName": "FormAI"
   },
   {
-    "CSVName": "CSVAudio.xlsx",
-    "SheetName": "CSVAudio",
-    "ExportName": "CSVAudio"
+    "CSVName": "FormAudio.xlsx",
+    "SheetName": "FormAudio",
+    "ExportName": "FormAudio"
   },
   {
-    "CSVName": "CSVCard.xlsx",
-    "SheetName": "CSVCard",
-    "ExportName": "CSVCard"
+    "CSVName": "FormCard.xlsx",
+    "SheetName": "FormCard",
+    "ExportName": "FormCard"
   },
   {
-    "CSVName": "CSVEntity.xlsx",
-    "SheetName": "CSVEntity",
-    "ExportName": "CSVEntity"
+    "CSVName": "FormEntity.xlsx",
+    "SheetName": "FormEntity",
+    "ExportName": "FormEntity"
   },
   {
-    "CSVName": "CSVEntity.xlsx",
-    "SheetName": "CSVPlayer",
-    "ExportName": "CSVPlayer"
+    "CSVName": "FormEntity.xlsx",
+    "SheetName": "FormPlayer",
+    "ExportName": "FormPlayer"
   },
   {
-    "CSVName": "CSVNPC.xlsx",
-    "SheetName": "CSVNPC",
-    "ExportName": "CSVNPC"
+    "CSVName": "FormNPC.xlsx",
+    "SheetName": "FormNPC",
+    "ExportName": "FormNPC"
   },
   {
-    "CSVName": "CSVFuncOpen.xlsx",
-    "SheetName": "CSVFuncOpen",
-    "ExportName": "CSVFuncOpen"
+    "CSVName": "FormFuncOpen.xlsx",
+    "SheetName": "FormFuncOpen",
+    "ExportName": "FormFuncOpen"
   }
 ]

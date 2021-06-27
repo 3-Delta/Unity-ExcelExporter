@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="SVN">
-      <HintPath>Resources\Dll\SVN.dll</HintPath>
-      <Private>false</Private>
+    <ProjectReference Include="..\SVN\SVN.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Resources\Dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
 
