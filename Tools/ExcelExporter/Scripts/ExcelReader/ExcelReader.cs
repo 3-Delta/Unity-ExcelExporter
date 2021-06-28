@@ -99,6 +99,9 @@ namespace ExcelExporter {
 
         public readonly StringBuilder loger = new StringBuilder();
 
+        private DynamicSheet dynamicSheet;
+        private DynamicSheetLine dynamicSheetLine;
+
         public Field id {
             get {
                 return this.fields[0];
@@ -343,13 +346,14 @@ namespace ExcelExporter {
                 if (rlt && !isZero && (this.classExportType & exportType) == exportType) {
                     string typeName = typeof(DynamicSheet).Namespace + "." + name + nameof(DynamicSheet);
                     Type type = Type.GetType(typeName);
-                    DynamicSheet dynamicSheet = Activator.CreateInstance(type) as DynamicSheet;
+                    dynamicSheet = Activator.CreateInstance(type) as DynamicSheet;
                     dynamicSheet.Reset(this, null, null);
                     dynamicSheet.GenerateClass();
 
                     typeName = typeof(DynamicSheetLine).Namespace + "." + name + nameof(DynamicSheetLine);
                     type = Type.GetType(typeName);
-                    DynamicSheetLine dynamicSheetLine = Activator.CreateInstance(type) as DynamicSheetLine;
+
+                    dynamicSheetLine = Activator.CreateInstance(type) as DynamicSheetLine;
                     dynamicSheetLine.Reset(this);
                     dynamicSheetLine.GenerateClass();
 

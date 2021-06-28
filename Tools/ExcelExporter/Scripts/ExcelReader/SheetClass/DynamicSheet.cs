@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExcelExporter {
+﻿namespace ExcelExporter {
     public class DynamicSheet {
-        protected readonly StringBuilder stringBuilder = new StringBuilder();
-
         protected Sheet sheet;
 
         public string classFileNameNoExt { get; protected set; }
@@ -23,15 +17,17 @@ namespace ExcelExporter {
             this.dataFileNameNoExt = dataFileNameNoExt;
         }
 
-        public virtual void GenerateClass(int alignmentLevel = 0) {
-
+        public virtual string GenerateClassTitle(int alignmentLevel = 0) {
+            return null;
         }
-        public virtual void GenerateData() {
-
+        public virtual string GenerateClass(int alignmentLevel = 0) {
+            return null;
         }
-
-        public override string ToString() {
-            return stringBuilder.ToString();
+        public virtual string GenerateEnum(int alignmentLevel = 0) {
+            return null;
+        }
+        public virtual string GenerateData() {
+            return null;
         }
     }
 
@@ -40,27 +36,17 @@ namespace ExcelExporter {
         public const string EndBracket = "}";
 
         protected Sheet sheet;
-        protected readonly StringBuilder stringBuilder = new StringBuilder();
 
         public void Reset(Sheet sheet) {
             this.sheet = sheet;
         }
 
-        public virtual DynamicSheetLine GenerateClass(int alignmentLevel = 0) {
-            return this;
+        public virtual string GenerateClass(int alignmentLevel = 0) {
+            return null;
 
         }
-        public virtual DynamicSheetLine GenerateData() {
-            return this;
-        }
-
-        public virtual void Write(IList<string> exportTypes) {
-            for (int i = 0, length = exportTypes.Count; i < length; ++i) {
-            }
-        }
-
-        public override string ToString() {
-            return stringBuilder.ToString();
+        public virtual string GenerateData() {
+            return null;
         }
     }
 }

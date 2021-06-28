@@ -1,72 +1,109 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ExcelExporter {
     public class CSharpDynamicSheet : DynamicSheet {
+        public const string usingBody =
+@"$Tab$using System;
+$Tab$using System.Collections.Generic;
+$Tab$using System.Collections;
+
+";
+        public const string enumBody =
+@"$Tab$public eunm E#ClsName#Id {
+$Tab$    // EndOfThis
+$Tab$}
+";
         public const string body =
-@"#Tab#[System.Serializable]
-#Tab#public partial class #ClsName# : /*FormBase<#ClsName#>*/ {
-#Tab#    public readonly Dictionary<uint, #ClsName#Line> dict = new Dictionary<uint, #ClsName#Line>();
-#Tab#    // public bool hasLoaded { get; protected set; } = false;
+@"$Tab$[System.Serializable]
+$Tab$public partial class #ClsName# : /*FormBase<#ClsName#>*/ {
+$Tab$    public readonly Dictionary<uint, #ClsName#Line> dict = new Dictionary<uint, #ClsName#Line>();
+$Tab$    // public bool hasLoaded { get; protected set; } = false;
 
-#Tab#    public override void LoadFromBinary() {
-#Tab#        if(hasLoaded) {
-#Tab#            return;
-#Tab#        }
+$Tab$    public override void LoadFromBinary() {
+$Tab$        if(hasLoaded) {
+$Tab$            return;
+$Tab$        }
 
-#Tab#        using (BinaryOperator.BinaryOperator oper = new BinaryOperator.BinaryOperator(#Path#)) {
-#Tab#            dict.Clear();
-#Tab#            for (int i = 0, length = oper.ReadInt(); i < length; ++i) {
-#Tab#                var line = new #ClsName#Line();
-#Tab#                line.Read(oper);
-#Tab#                dict.Add(line.id, line);
-#Tab#            }
-#Tab#        }
+$Tab$        using (BinaryOperator.BinaryOperator oper = new BinaryOperator.BinaryOperator(#DataFilePath#)) {
+$Tab$            dict.Clear();
+$Tab$            for (int i = 0, length = oper.ReadInt(); i < length; ++i) {
+$Tab$                var line = new #ClsName#Line(oper);
+$Tab$                if(!dict.ContainsKey(line.id)) {
+$Tab$                    dict.Add(line.id, line);
+$Tab$                } else {
+$Tab$                    Debug.LogError($#Mark##ClsName# has exist id {line.id}.#Mark#);
+$Tab$                }
+$Tab$            }
+$Tab$        }
             
-#Tab#        hasLoaded = true;
-#Tab#    }
+$Tab$        hasLoaded = true;
+$Tab$    }
 
-#Tab#    public bool TryGet(uint id, out #ClsName#Line line) {
-#Tab#        line = null;
-#Tab#        return dict.TryGetValue(id, out #ClsName#Line line);
-#Tab#    }
+$Tab$    public bool TryGet(uint id, out #ClsName#Line line) {
+$Tab$        line = null;
+$Tab$        return dict.TryGetValue(id, out #ClsName#Line line);
+$Tab$    }
 
-#Tab#    public void Get(IList<uint> ids, out IList<#ClsName#Line> list) {
-#Tab#        list = new IList<#ClsName#Line>();
-#Tab#        for (int i = 0, length = ids.Count; i < length; ++ i) {
-#Tab#            TryGet(ids[i], out out #ClsName#Line line);
-#Tab#            list.Add(line);
-#Tab#        }
-#Tab#    }
+$Tab$    public void Get(IList<uint> ids, out IList<#ClsName#Line> list) {
+$Tab$        list = new List<#ClsName#Line>();
+$Tab$        for (int i = 0, length = ids.Count; i < length; ++ i) {
+$Tab$            TryGet(ids[i], out out #ClsName#Line line);
+$Tab$            list.Add(line);
+$Tab$        }
+$Tab$    }
 
-#Tab#    public void Get(IList<IList<uint>> ids, out IList<IList<#ClsName#Line>> list) {
-#Tab#        list = new List<IList<#ClsName#Line>>();
-#Tab#        for (int i = 0, length = ids.Count; i < length; ++ i) {
-#Tab#            var ls = new List<#ClsName#Line>();
-#Tab#            for (int j = 0, lengthJ = ids[i].Count; j < lengthJ; ++j) {
-#Tab#                TryGet(ids[i][j], out out #ClsName#Line line); 
-#Tab#                ls.Add(line);
-#Tab#            }
-#Tab#            list.Add(ls);
-#Tab#        }
-#Tab#    }
-#Tab#}
+$Tab$    public void Get(IList<IList<uint>> ids, out IList<IList<#ClsName#Line>> list) {
+$Tab$        list = new List<IList<#ClsName#Line>>();
+$Tab$        for (int i = 0, length = ids.Count; i < length; ++ i) {
+$Tab$            Get(ids[i], out IList<#ClsName#Line> ls);
+$Tab$            list.Add(ls);
+$Tab$        }
+$Tab$    }
+$Tab$}
 
 ";
         public CSharpDynamicSheet() { }
         public CSharpDynamicSheet(Sheet sheet, string classFileNameNoExt, string dataFileNameNoExt) : base(sheet, classFileNameNoExt, dataFileNameNoExt) { }
+        public string Body(int alignmentLevel = 0, bool withEnum = false) {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(GenerateClassTitle(alignmentLevel));
+            if (withEnum) {
+                sb.Append(GenerateEnum(alignmentLevel));
+            }
+            sb.Append(GenerateClass(alignmentLevel));
+            return sb.ToString();
+        }
 
-        public override void GenerateClass(int alignmentLevel = 0) {
-            this.stringBuilder.Clear();
+        public override string GenerateClassTitle(int alignmentLevel = 0) {
+            return usingBody;
+        }
+
+        public override string GenerateClass(int alignmentLevel = 0) {
+            StringBuilder sb = new StringBuilder();
 
             string trim = new string(' ', alignmentLevel * 4);
-            this.stringBuilder.Append(body);
-            this.stringBuilder.Replace("#Tab#", trim);
-            this.stringBuilder.Replace("#ClsName#", this.sheet.sheetName);
-            this.stringBuilder.Replace("#Path#", this.dataFileNameNoExt);
-        }
-        public override void GenerateData() {
+            sb.Append(body);
+            sb.Replace("$Tab$", trim);
+            sb.Replace("#ClsName#", this.sheet.sheetName);
+            sb.Replace("#DataFilePath#", this.dataFileNameNoExt);
+            sb.Replace("#Mark#", "\"");
 
+            return sb.ToString();
+        }
+        public override string GenerateEnum(int alignmentLevel = 0) {
+            StringBuilder sb = new StringBuilder();
+
+            string trim = new string(' ', alignmentLevel * 4);
+            sb.Append(enumBody);
+            sb.Replace("$Tab$", trim);
+            sb.Replace("#ClsName#", this.sheet.sheetName);
+            sb.Replace("_EndOfThis_", this.sheet.sheetName);
+            return null;
+        }
+        public override string GenerateData() {
+            return null;
         }
     }
 
@@ -85,58 +122,57 @@ namespace ExcelExporter {
             { "string", typeof(string)},
         };
 
-        public override DynamicSheetLine GenerateClass(int alignmentLevel = 0) {
-            this.stringBuilder.Clear();
-
+        public override string GenerateClass(int alignmentLevel = 0) {
+            StringBuilder sb = new StringBuilder();
             string trim = new string(' ', alignmentLevel * 4);
 
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.AppendLine("[System.Serializable]");
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.AppendFormat("public partial class {0}Line ", this.sheet.sheetName);
-            this.stringBuilder.Append(BeginBracket);
+            sb.Append(trim);
+            sb.AppendLine("[System.Serializable]");
+            sb.Append(trim);
+            sb.AppendFormat("public partial class {0}Line ", this.sheet.sheetName);
+            sb.Append(BeginBracket);
 
             #region 成员变量
             for (int i = 0, length = this.sheet.fields.Count; i < length; ++i) {
-                this.stringBuilder.AppendLine();
-                this.stringBuilder.Append(trim);
+                sb.AppendLine();
+                sb.Append(trim);
                 Field field = this.sheet.fields[i];
                 string realType = field.realType;
                 if (field.IsArray) {
                     if (field.isTypeArray) {
                         if (field.IsFormType) {
-                            this.stringBuilder.AppendFormat("    public readonly IList<IList<{0}Line>> {1};", realType, field.name);
+                            sb.AppendFormat("    public readonly IList<IList<{0}Line>> {1};", realType, field.name);
                         } else {
-                            this.stringBuilder.AppendFormat("    public readonly IList<IList<{0}>> {1};", realType, field.name);
+                            sb.AppendFormat("    public readonly IList<IList<{0}>> {1};", realType, field.name);
                         }
                     } else {
                         if (field.IsFormType) {
-                            this.stringBuilder.AppendFormat("    public readonly IList<{0}Line> {1};", realType, field.name);
+                            sb.AppendFormat("    public readonly IList<{0}Line> {1};", realType, field.name);
                         } else {
-                            this.stringBuilder.AppendFormat("    public readonly IList<{0}> {1};", realType, field.name);
+                            sb.AppendFormat("    public readonly IList<{0}> {1};", realType, field.name);
                         }
                     }
                 } else {
                     if (field.IsFormType) {
-                        this.stringBuilder.AppendFormat("    public readonly {0}Line {1};", realType, field.name);
+                        sb.AppendFormat("    public readonly {0}Line {1};", realType, field.name);
                     } else {
-                        this.stringBuilder.AppendFormat("    public readonly {0} {1};", realType, field.name);
+                        sb.AppendFormat("    public readonly {0} {1};", realType, field.name);
                     }
                 }
             }
+
+            sb.AppendLine();
             #endregion
 
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.AppendFormat("    public {0}Line(BinaryOperator oper) ", this.sheet.sheetName);
-            this.stringBuilder.Append(BeginBracket);
-
             #region 成员读取赋值
+            sb.AppendLine();
+            sb.Append(trim);
+            sb.AppendFormat("    public {0}Line(BinaryOperator oper) ", this.sheet.sheetName);
+            sb.Append(BeginBracket);
             for (int i = 0, length = this.sheet.fields.Count; i < length; ++i) {
-                this.stringBuilder.AppendLine();
-                this.stringBuilder.Append(trim);
-                this.stringBuilder.Append("        ");
+                sb.AppendLine();
+                sb.Append(trim);
+                sb.Append("        ");
 
                 Field field = this.sheet.fields[i];
                 string realType = field.realType;
@@ -164,43 +200,41 @@ namespace ExcelExporter {
                 if (field.IsArray) {
                     if (isCellArray) {
                         if (field.IsFormType) {
-                            this.stringBuilder.AppendFormat(readFormArray2, realTypeName, realTypeName, field.name);
-                        } else { 
-                            this.stringBuilder.AppendFormat(isBuiltinType ? readBuiltinArray2 : readCustomArray2, field.name, realTypeName);
+                            sb.AppendFormat(readFormArray2, realTypeName, realTypeName, field.name);
+                        } else {
+                            sb.AppendFormat(isBuiltinType ? readBuiltinArray2 : readCustomArray2, field.name, realTypeName);
                         }
                     } else {
                         if (field.IsFormType) {
-                            this.stringBuilder.AppendFormat(readFormArray, realTypeName, realTypeName, field.name);
+                            sb.AppendFormat(readFormArray, realTypeName, realTypeName, field.name);
                         } else {
-                            this.stringBuilder.AppendFormat(isBuiltinType ? readBuiltinArray : readCustomArray, field.name, realTypeName);
+                            sb.AppendFormat(isBuiltinType ? readBuiltinArray : readCustomArray, field.name, realTypeName);
                         }
                     }
                 } else {
                     if (field.IsFormType) {
-                        this.stringBuilder.AppendFormat(readForm, realTypeName, field.name, field.name);
+                        sb.AppendFormat(readForm, realTypeName, field.name, field.name);
                     } else {
-                        this.stringBuilder.AppendFormat(isBuiltinType ? readBuiltin : readCustom, field.name, realTypeName);
+                        sb.AppendFormat(isBuiltinType ? readBuiltin : readCustom, field.name, realTypeName);
                     }
                 }
             }
+
+            sb.AppendLine();
+            sb.Append(trim);
+            sb.Append("    ");
+            sb.Append(EndBracket);
             #endregion
 
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.Append("    ");
-            this.stringBuilder.Append(EndBracket);
-
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.Append("    public void WriteTo(BinaryOperator oper) ");
-            this.stringBuilder.Append(BeginBracket);
-
             #region 成员Write
+            sb.AppendLine();
+            sb.Append(trim);
+            sb.Append("    public void WriteTo(BinaryOperator oper) ");
+            sb.Append(BeginBracket);
             for (int i = 0, length = this.sheet.fields.Count; i < length; ++i) {
-                this.stringBuilder.AppendLine();
-                this.stringBuilder.Append(trim);
-                this.stringBuilder.Append("        ");
+                sb.AppendLine();
+                sb.Append(trim);
+                sb.Append("        ");
 
                 Field field = this.sheet.fields[i];
                 string realType = field.realType;
@@ -226,35 +260,35 @@ namespace ExcelExporter {
 
                 if (field.IsArray) {
                     if (isCellArray) {
-                        this.stringBuilder.AppendFormat(isBuiltinType ? writeBuiltinArray2 : writeCustomArray2, realTypeName, field.name);
+                        sb.AppendFormat(isBuiltinType ? writeBuiltinArray2 : writeCustomArray2, realTypeName, field.name);
                     } else {
                         if (field.IsFormType) {
-                            this.stringBuilder.AppendFormat(writeFormArray, realTypeName, field.name);
+                            sb.AppendFormat(writeFormArray, realTypeName, field.name);
                         } else {
-                            this.stringBuilder.AppendFormat(isBuiltinType ? writeBuiltinArray : writeCustomArray, realTypeName, field.name);
+                            sb.AppendFormat(isBuiltinType ? writeBuiltinArray : writeCustomArray, realTypeName, field.name);
                         }
                     }
                 } else {
                     if (field.IsFormType) {
-                        this.stringBuilder.AppendFormat(writeForm, realTypeName, field.name);
+                        sb.AppendFormat(writeForm, realTypeName, field.name);
                     } else {
-                        this.stringBuilder.AppendFormat(isBuiltinType ? writeBuiltin : writeCustom, realTypeName, field.name);
+                        sb.AppendFormat(isBuiltinType ? writeBuiltin : writeCustom, realTypeName, field.name);
                     }
                 }
             }
+
+            sb.AppendLine();
+            sb.Append(trim);
+            sb.Append("    ");
+            sb.Append(EndBracket);
             #endregion
 
-            this.stringBuilder.AppendLine();
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.Append("    ");
-            this.stringBuilder.Append(EndBracket);
-            this.stringBuilder.AppendLine();
+            sb.AppendLine();
+            sb.Append(trim);
+            sb.Append(EndBracket);
+            sb.AppendLine();
 
-            this.stringBuilder.Append(trim);
-            this.stringBuilder.Append(EndBracket);
-            this.stringBuilder.AppendLine();
-
-            return this;
+            return sb.ToString();
         }
     }
 }
