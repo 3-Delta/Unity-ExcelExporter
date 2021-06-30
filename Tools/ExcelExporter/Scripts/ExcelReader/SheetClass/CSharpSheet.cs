@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Newtonsoft.Json;
+
 namespace ExcelExporter {
     public class CSharpDynamicSheet : DynamicSheet {
         public const string usingBody =
@@ -39,6 +41,25 @@ $Tab$            }
 $Tab$        }
             
 $Tab$        hasLoaded = true;
+$Tab$    }
+
+$Tab$    public override void LoadFromJson() {
+$Tab$        if(hasLoaded) {
+$Tab$            return;
+$Tab$        }
+$Tab$        using (System.IO.StreamReader reader = new System.IO.StreamReader(#DataFilePath#)) {
+$Tab$            try {
+$Tab$                string json = reader.ReadToEnd();
+$Tab$                dict = JsonConvert.DeserializeObject<Dictionary<uint, #ClsName#Line>>(json);
+$Tab$            } catch(Exception ex) { 
+$Tab$                Debug.LogError(#ReadJsonFileFailed#: #DataFilePath#);
+$Tab$            }
+$Tab$        }
+$Tab$        hasLoaded = true;
+$Tab$    }
+
+$Tab$    public override void LoadFromCs() {
+$Tab$        // dict = #ClsName#Data.Instance.dict;
 $Tab$    }
 
 $Tab$    public bool TryGet(uint id, out #ClsName#Line line) {
@@ -88,7 +109,8 @@ $Tab$}
             sb.Replace("$Tab$", trim);
             sb.Replace("#ClsName#", this.sheet.sheetName);
             sb.Replace("#DataFilePath#", this.dataFileNameNoExt);
-            sb.Replace("#Mark#", "\"");
+            sb.Replace("#DataFilePath#", this.dataFileNameNoExt);
+            sb.Replace("#ReadJsonFileFailed#", "Read Json File Failed");
 
             return sb.ToString();
         }
@@ -99,7 +121,8 @@ $Tab$}
             sb.Append(enumBody);
             sb.Replace("$Tab$", trim);
             sb.Replace("#ClsName#", this.sheet.sheetName);
-            sb.Replace("_EndOfThis_", this.sheet.sheetName);
+
+            sb.Replace("// EndOfThis", this.sheet.sheetName);
             return null;
         }
         public override string GenerateData() {
