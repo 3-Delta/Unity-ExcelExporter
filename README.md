@@ -2,6 +2,10 @@
 
 Excel表格导出工具： 进度: 3%  
 
+<p align="center" >
+<img src="https://github.com/kaclok/Unity-ExcelExporter/tree/main/Tools/ExcelExporterUI/Resources/Desc.png" alt="ExporterUI" title="ExporterUI">
+</p>
+
 0. 无需安装office环境	
 1. Excel表格打开时依然可以本程序读取		
 2. 支持导出纯数据文件 以及 数据类定义文件		
