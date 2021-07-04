@@ -19,73 +19,73 @@ using System.Collections.Generic;
 
     public class CSharpDynamicSheet : DynamicSheet {
         public const string body =
-@"$Tab$[System.Serializable]
-$Tab$public partial class #ClsName# : /*FormBase<#ClsName#>*/ {
-$Tab$    public readonly Dictionary<uint, #ClsName#Line> dict = new Dictionary<uint, #ClsName#Line>();
-$Tab$    // public bool hasLoaded { get; protected set; } = false;
+@"#Tab#[System.Serializable]
+#Tab#public partial class #ClsName# : /*FormBase<#ClsName#>*/ {
+#Tab#    public readonly Dictionary<uint, #ClsName#Line> dict = new Dictionary<uint, #ClsName#Line>();
+#Tab#    // public bool hasLoaded { get; protected set; } = false;
 
-$Tab$    public override void LoadFromBinary() {
-$Tab$        if(hasLoaded) {
-$Tab$            return;
-$Tab$        }
+#Tab#    public override void LoadFromBinary() {
+#Tab#        if(hasLoaded) {
+#Tab#            return;
+#Tab#        }
 
-$Tab$        using (BinaryOperator.BinaryOperator oper = new BinaryOperator.BinaryOperator(#DataFilePath#)) {
-$Tab$            dict.Clear();
-$Tab$            for (int i = 0, length = oper.ReadInt(); i < length; ++i) {
-$Tab$                var line = new #ClsName#Line(oper);
-$Tab$                if(!dict.ContainsKey(line.id)) {
-$Tab$                    dict.Add(line.id, line);
-$Tab$                } else {
-$Tab$                    Debug.LogError($#Mark##ClsName# has exist id {line.id}.#Mark#);
-$Tab$                }
-$Tab$            }
-$Tab$        }
+#Tab#        using (BinaryOperator.BinaryOperator oper = new BinaryOperator.BinaryOperator(#DataFilePath#)) {
+#Tab#            dict.Clear();
+#Tab#            for (int i = 0, length = oper.ReadInt(); i < length; ++i) {
+#Tab#                var line = new #ClsName#Line(oper);
+#Tab#                if(!dict.ContainsKey(line.id)) {
+#Tab#                    dict.Add(line.id, line);
+#Tab#                } else {
+#Tab#                    Debug.LogError($#Mark##ClsName# has exist id {line.id}.#Mark#);
+#Tab#                }
+#Tab#            }
+#Tab#        }
             
-$Tab$        hasLoaded = true;
-$Tab$    }
+#Tab#        hasLoaded = true;
+#Tab#    }
 
-$Tab$    public override void LoadFromJson() {
-$Tab$        if(hasLoaded) {
-$Tab$            return;
-$Tab$        }
+#Tab#    public override void LoadFromJson() {
+#Tab#        if(hasLoaded) {
+#Tab#            return;
+#Tab#        }
 
-$Tab$        using (System.IO.StreamReader reader = new System.IO.StreamReader(#DataFilePath#)) {
-$Tab$            try {
-$Tab$                string json = reader.ReadToEnd();
-$Tab$                dict = JsonConvert.DeserializeObject<Dictionary<uint, #ClsName#Line>>(json);
-$Tab$            } catch(Exception ex) { 
-$Tab$                Debug.LogError(#ReadJsonFileFailed#);
-$Tab$            }
-$Tab$        }
+#Tab#        using (System.IO.StreamReader reader = new System.IO.StreamReader(#DataFilePath#)) {
+#Tab#            try {
+#Tab#                string json = reader.ReadToEnd();
+#Tab#                dict = JsonConvert.DeserializeObject<Dictionary<uint, #ClsName#Line>>(json);
+#Tab#            } catch(Exception ex) { 
+#Tab#                Debug.LogError(#ReadJsonFileFailed#);
+#Tab#            }
+#Tab#        }
 
-$Tab$        hasLoaded = true;
-$Tab$    }
+#Tab#        hasLoaded = true;
+#Tab#    }
 
-$Tab$    public override void LoadFromCs() {
-$Tab$        // dict = #ClsName#Data.Instance.dict;
-$Tab$    }
+#Tab#    public override void LoadFromCs() {
+#Tab#        // dict = #ClsName#Data.Instance.dict;
+#Tab#    }
 
-$Tab$    public bool TryGet(uint id, out #ClsName#Line line) {
-$Tab$        line = null;
-$Tab$        return dict.TryGetValue(id, out #ClsName#Line line);
-$Tab$    }
+#Tab#    public bool TryGet(uint id, out #ClsName#Line line) {
+#Tab#        line = null;
+#Tab#        return dict.TryGetValue(id, out #ClsName#Line line);
+#Tab#    }
 
-$Tab$    public void Get(IList<uint> ids, out IList<#ClsName#Line> list) {
-$Tab$        list = new List<#ClsName#Line>();
-$Tab$        for (int i = 0, length = ids.Count; i < length; ++ i) {
-$Tab$            TryGet(ids[i], out out #ClsName#Line line);
-$Tab$            list.Add(line);
-$Tab$        }
-$Tab$    }
+#Tab#    public void Get(IList<uint> ids, out IList<#ClsName#Line> list) {
+#Tab#        list = new List<#ClsName#Line>();
+#Tab#        for (int i = 0, length = ids.Count; i < length; ++ i) {
+#Tab#            TryGet(ids[i], out out #ClsName#Line line);
+#Tab#            list.Add(line);
+#Tab#        }
+#Tab#    }
 
-$Tab$    public void Get(IList<IList<uint>> ids, out IList<IList<#ClsName#Line>> list) {
-$Tab$        list = new List<IList<#ClsName#Line>>();
-$Tab$        for (int i = 0, length = ids.Count; i < length; ++ i) {
-$Tab$            Get(ids[i], out IList<#ClsName#Line> ls);
-$Tab$            list.Add(ls);
-$Tab$        }
-$Tab$    }
-$Tab$}
+#Tab#    public void Get(IList<IList<uint>> ids, out IList<IList<#ClsName#Line>> list) {
+#Tab#        list = new List<IList<#ClsName#Line>>();
+#Tab#        for (int i = 0, length = ids.Count; i < length; ++ i) {
+#Tab#            Get(ids[i], out IList<#ClsName#Line> ls);
+#Tab#            list.Add(ls);
+#Tab#        }
+#Tab#    }
+#Tab#}
 
 ";
         public CSharpDynamicSheet() { }
@@ -96,11 +96,12 @@ $Tab$}
 
             string trim = new string(' ', alignmentLevel * 4);
             sb.Append(body);
-            sb.Replace("$Tab$", trim);
+            sb.Replace("#Tab#", trim);
+            sb.Replace("#Mark#", "\"");
             sb.Replace("#ClsName#", sheet.sheetName);
             string filePath = string.Format("\"{0}/{1}\"", sheet.classExportType.ToString(), sheet.sheetName);
             sb.Replace("#DataFilePath#", filePath);
-            sb.Replace("#ReadJsonFileFailed#", string.Format("Read File:{0} Failed!", sheet.sheetName));
+            sb.Replace("#ReadJsonFileFailed#", string.Format("\"Read File:{0} Failed!\"", sheet.sheetName));
 
             return sb.ToString();
         }
@@ -249,74 +250,74 @@ $Tab$}
             sb.AppendLine();
             #endregion
 
-            #region 成员Write
-            sb.AppendLine();
-            sb.Append(trim);
-            sb.Append("    public void WriteTo(BinaryOperator oper) ");
-            sb.Append(ClassHelper.BeginBracket);
-            for (int i = 0, length = fields.Count; i < length; ++i) {
-                sb.AppendLine();
-                sb.Append(trim);
-                sb.Append("        ");
+            //#region 成员Write
+            //sb.AppendLine();
+            //sb.Append(trim);
+            //sb.Append("    public void WriteTo(BinaryOperator oper) ");
+            //sb.Append(ClassHelper.BeginBracket);
+            //for (int i = 0, length = fields.Count; i < length; ++i) {
+            //    sb.AppendLine();
+            //    sb.Append(trim);
+            //    sb.Append("        ");
 
-                Field field = fields[i];
-                string realType = field.realType;
-                bool isBuiltinType = field.IsBuiltinType;
-                bool isCellArray = field.isTypeArray;
+            //    Field field = fields[i];
+            //    string realType = field.realType;
+            //    bool isBuiltinType = field.IsBuiltinType;
+            //    bool isCellArray = field.isTypeArray;
 
-                string realTypeName = realType;
-                if (isBuiltinType) {
-                    Type type = NAME2TYPE[realTypeName];
-                    realTypeName = type.Name;
-                }
+            //    string realTypeName = realType;
+            //    if (isBuiltinType) {
+            //        Type type = NAME2TYPE[realTypeName];
+            //        realTypeName = type.Name;
+            //    }
 
-                string writeBuiltin = "oper.Write{0}(this.{1});";
-                string writeCustom = "oper.Write<{0}>(this.{1})";
-                string writeEnum = "oper.WriteInt32((int)this.{0})";
-                string writeFloat = "oper.WriteUIn32((uint)(this.{0} * 1000f));";
-                string writeForm = "oper.Write<{0}Line>(this.{1})";
+            //    string writeBuiltin = "oper.Write{0}(this.{1});";
+            //    string writeCustom = "oper.Write<{0}>(this.{1})";
+            //    string writeEnum = "oper.WriteInt32((int)this.{0})";
+            //    string writeFloat = "oper.WriteUIn32((uint)(this.{0} * 1000f));";
+            //    string writeForm = "oper.Write<{0}Line>(this.{1})";
 
-                string writeBuiltinArray = "oper.Write{0}Array(this.{1});";
-                string writeCustomArray = "oper.WriteArray<{0}>(this.{1});";
-                string writeFormArray = "oper.WriteArray<{0}Line>(this.{1});";
+            //    string writeBuiltinArray = "oper.Write{0}Array(this.{1});";
+            //    string writeCustomArray = "oper.WriteArray<{0}>(this.{1});";
+            //    string writeFormArray = "oper.WriteArray<{0}Line>(this.{1});";
 
-                string writeBuiltinArray2 = "oper.Write{0}Array2(this.{1});";
-                string writeCustomArray2 = "oper.WriteArray2<{0}>(this.{1});";
+            //    string writeBuiltinArray2 = "oper.Write{0}Array2(this.{1});";
+            //    string writeCustomArray2 = "oper.WriteArray2<{0}>(this.{1});";
 
-                if (field.IsArray) {
-                    if (isCellArray) {
-                        sb.AppendFormat(isBuiltinType ? writeBuiltinArray2 : writeCustomArray2, realTypeName, field.name);
-                    }
-                    else {
-                        if (field.IsFormType) {
-                            sb.AppendFormat(writeFormArray, realTypeName, field.name);
-                        }
-                        else {
-                            sb.AppendFormat(isBuiltinType ? writeBuiltinArray : writeCustomArray, realTypeName, field.name);
-                        }
-                    }
-                }
-                else {
-                    if (field.IsFormType) {
-                        sb.AppendFormat(writeForm, realTypeName, field.name);
-                    }
-                    else if (field.IsEnumType) {
-                        sb.AppendFormat(writeEnum, field.name);
-                    }
-                    else if (field.IsFloatType) {
-                        sb.AppendFormat(writeFloat, field.name);
-                    }
-                    else {
-                        sb.AppendFormat(isBuiltinType ? writeBuiltin : writeCustom, realTypeName, field.name);
-                    }
-                }
-            }
+            //    if (field.IsArray) {
+            //        if (isCellArray) {
+            //            sb.AppendFormat(isBuiltinType ? writeBuiltinArray2 : writeCustomArray2, realTypeName, field.name);
+            //        }
+            //        else {
+            //            if (field.IsFormType) {
+            //                sb.AppendFormat(writeFormArray, realTypeName, field.name);
+            //            }
+            //            else {
+            //                sb.AppendFormat(isBuiltinType ? writeBuiltinArray : writeCustomArray, realTypeName, field.name);
+            //            }
+            //        }
+            //    }
+            //    else {
+            //        if (field.IsFormType) {
+            //            sb.AppendFormat(writeForm, realTypeName, field.name);
+            //        }
+            //        else if (field.IsEnumType) {
+            //            sb.AppendFormat(writeEnum, field.name);
+            //        }
+            //        else if (field.IsFloatType) {
+            //            sb.AppendFormat(writeFloat, field.name);
+            //        }
+            //        else {
+            //            sb.AppendFormat(isBuiltinType ? writeBuiltin : writeCustom, realTypeName, field.name);
+            //        }
+            //    }
+            //}
 
-            sb.AppendLine();
-            sb.Append(trim);
-            sb.Append("    ");
-            sb.Append(ClassHelper.EndBracket);
-            #endregion
+            //sb.AppendLine();
+            //sb.Append(trim);
+            //sb.Append("    ");
+            //sb.Append(ClassHelper.EndBracket);
+            //#endregion
 
             sb.AppendLine();
             sb.Append(trim);
@@ -332,9 +333,9 @@ $Tab$}
         {
             get {
                 return
-@"$Tab$public eunm E#ClsName#Id {
-$Tab$    // EndOfThis
-$Tab$}
+@"#Tab#public eunm E#ClsName#Id {
+#Tab#    // EndOfThis
+#Tab#}
 
 ";
             }

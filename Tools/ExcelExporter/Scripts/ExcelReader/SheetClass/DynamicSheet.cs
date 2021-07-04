@@ -58,7 +58,7 @@ namespace ExcelExporter {
     public abstract class DynamicSheetEnum {
         public const string END_OF_THIS =
 @"
-$Tab$    // EndOfThis";
+#Tab#    // EndOfThis";
         protected Sheet sheet;
         public virtual string body { get; }
 
@@ -76,17 +76,17 @@ $Tab$    // EndOfThis";
 
             string trim = new string(' ', alignmentLevel * 4);
             sb.Append(body);
-            sb.Replace("$Tab$", trim);
+            sb.Replace("#Tab#", trim);
             sb.Replace("#ClsName#", sheet.sheetName);
 
             for (int i = 0, length = idNames.Count; i < length; ++i) {
                 string name = idNames[i];
                 string value = idValues[i];
                 sb.Replace("// EndOfThis", string.Format(@"{0} = {1},
-$Tab$    // EndOfThis", name, value));
+#Tab#    // EndOfThis", name, value));
             }
 
-            sb.Replace("$Tab$", trim);
+            sb.Replace("#Tab#", trim);
             return sb.ToString();
         }
     }
