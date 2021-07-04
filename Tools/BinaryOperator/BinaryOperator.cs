@@ -66,6 +66,9 @@ namespace BinaryOperator {
         public ulong ReadUInt64() { return this.opReader.ReadUInt64(); }
         public float ReadSingle() { return this.opReader.ReadSingle(); }
         public string ReadString() { return this.opReader.ReadString(); }
+
+        // 为了表格中帧同步浮点数
+        public float ReadFloat() { return this.opReader.ReadUInt32() * 0.001f; }
         public T Read<T>() where T : ICustomFieldBinary, new() {
             T t = new T();
             t.Read(this);
@@ -151,6 +154,15 @@ namespace BinaryOperator {
             float[] list = new float[length];
             for (int i = 0; i < length; ++i) {
                 list[i] = this.opReader.ReadSingle();
+            }
+            return list;
+        }
+
+        public IList<float> ReadFloatArray() {
+            int length = this.opReader.ReadInt32();
+            float[] list = new float[length];
+            for (int i = 0; i < length; ++i) {
+                list[i] = ReadFloat();
             }
             return list;
         }
@@ -245,6 +257,14 @@ namespace BinaryOperator {
             }
             return list;
         }
+        public IList<IList<float>> ReadFloatArray2() {
+            int length = this.opReader.ReadInt32();
+            IList<IList<float>> list = new List<IList<float>>(length);
+            for (int i = 0; i < length; ++i) {
+                list.Add(this.ReadFloatArray());
+            }
+            return list;
+        }
         public IList<IList<T>> ReadArray2<T>() where T : ICustomFieldBinary, new() {
             int length = this.opReader.ReadInt32();
             IList<IList<T>> list = new List<IList<T>>(length);
@@ -267,6 +287,7 @@ namespace BinaryOperator {
         public void Write(ulong value) { this.opWriter.Write(value); }
         public void Write(float value) { this.opWriter.Write(value); }
         public void Write(string value) { this.opWriter.Write(value); }
+        public void WriteFloat(float value) { this.opWriter.Write((int)value * 1000); }
         public void Write<T>(T value) where T : ICustomFieldBinary, new() { value.Write(this); }
         #endregion
 
@@ -277,7 +298,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -287,7 +309,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 // 为null写入长度0
                 this.opWriter.Write(0);
             }
@@ -298,7 +321,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -308,7 +332,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -318,7 +343,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -328,7 +354,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 // 为null写入长度0
                 this.opWriter.Write(0);
             }
@@ -339,7 +366,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -349,7 +377,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -359,7 +388,8 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -369,7 +399,19 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     this.opWriter.Write(v);
                 }
-            } else {
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void WriteFloat(IList<float> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.WriteFloat(v);
+                }
+            }
+            else {
                 this.opWriter.Write(0);
             }
         }
@@ -379,6 +421,132 @@ namespace BinaryOperator {
                 foreach (var v in values) {
                     v.Write(this);
                 }
+            }
+        }
+        #endregion
+
+        #region 写入二维数组
+        public void Write(IList<IList<bool>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<byte>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                // 为null写入长度0
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<sbyte>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<short>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<ushort>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<int>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                // 为null写入长度0
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<uint>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<long>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<ulong>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void Write(IList<IList<float>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.Write(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
+            }
+        }
+        public void WriteFloat(IList<IList<float>> values) {
+            if (values != null) {
+                this.opWriter.Write(values.Count);
+                foreach (var v in values) {
+                    this.WriteFloat(v);
+                }
+            }
+            else {
+                this.opWriter.Write(0);
             }
         }
         #endregion

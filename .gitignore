@@ -166,3 +166,16 @@
 /Tools/ExcelExporter/bin/Debug/netcoreapp3.1/zh-Hant/*.dll
 /Tools/ExcelExporter/bin/Debug/*.txt
 /Tools/ExcelExporterUI/obj/Debug/netcoreapp3.1/*.CopyComplete
+/Tools/BinaryOperator/obj/Debug/net5.0/*.cs
+/Tools/BinaryOperator/obj/Debug/net5.0/*.cache
+/Tools/BinaryOperator/obj/Debug/net5.0/*.editorconfig
+/Tools/BinaryOperator/obj/*.info
+/Tools/CSharpOperator/obj/Debug/netcoreapp3.1/*.editorconfig
+/Tools/CSharpOperator/obj/*.info
+/Tools/CppOperator/obj/Debug/netcoreapp3.1/*.editorconfig
+/Tools/CppOperator/obj/*.info
+/Tools/ExcelExporter/.idea/.idea.ExcelExporter/.idea/*.gitignore
+/Tools/ExcelExporter/.idea/.idea.ExcelExporter/.idea/*.xml
+/Tools/ExcelExporter/obj/Debug/netcoreapp3.1/*.editorconfig
+/Tools/ExcelExporter/obj/*.info
+/Tools/BinaryOperator/obj/Debug/netcoreapp3.1/*.editorconfig
