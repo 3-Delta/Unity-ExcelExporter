@@ -33,4 +33,7 @@ Excel表格导出工具
 4. https://github.com/kaclok/Excel-Translator    
 5. https://github.com/monkey256/ExcelExport    
 6. https://github.com/xieliujian/Excel2Unity    
-7. https://github.com/sniper00/ExcelExport    
+7. https://github.com/sniper00/ExcelExport 
+8. https://github.com/cheadaq/tabugen
+9. https://github.com/davyxu/tabtoy
+10. https://www.zhihu.com/column/xieliujian   
