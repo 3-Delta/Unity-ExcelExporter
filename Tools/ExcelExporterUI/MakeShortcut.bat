@@ -1,48 +1,49 @@
-:: ×÷ÓÃ£º´´½¨ÎÄ¼þµÄÈíÁ¬½Ó
+:: ä½œç”¨ï¼šåˆ›å»ºæ–‡ä»¶çš„è½¯è¿žæŽ¥
+:: ä¸¾ä¾‹ï¼šMakeShortcut.bat $(TargetDir)$(ProjectName).exe $(SolutionDir)$(ProjectName).exe
 
-:: rem ºÍ :: ÊÇ×¢ÊÍ
-:: echo±íÊ¾Êä³öµ½¿ØÖÆÌ¨£¬off±íÊ¾ÃüÁî±¾Éí²»Êä³öµ½¿ØÖÆÌ¨
-:: @ÊÇ²»ÈÃ±¾ÐÐÃüÁîÊä³öµ½¿ØÖÆÌ¨
-:: set ÉèÖÃ±äÁ¿£¬ Ê¹ÓÃ±äÁ¿ÐèÒª%%°üÆðÀ´, =Ç°ºó²»ÄÜÓÐ¿Õ¸ñ
-:: Íâ²¿²ÎÊý´«µÝµ½batÄÚ²¿£¬batÄÚ²¿Ê¹ÓÃ%1 ~ %9½ÓÊÕ£¬×î¶à9¸ö²ÎÊý, %0ÔòÊÇÅú´¦ÀíÎÄ¼þ±¾Éí
-:: %cd% ±íÊ¾Ö´ÐÐbatÎÄ¼þÊ±ËùÔÚÂ·¾¶£¬ ±ÈÈçEÅÌÏÂÖ´ÐÐFÅÌÏÂµÄÒ»¸öbatÎÄ¼þ£¬ cdÏÔÊ¾ÎªE
-:: %~dp0 µ±Ç°Ö´ÐÐµÄbatËùÔÚµÄÂ·¾¶£¬²»°üÀ¨batÃû,Ò²¾ÍÊÇFÅÌ
-:: ÍÆ¼ö %~dp0£¬%cd%¾­³£ÔÚ¹ÜÀíÔ±È¨ÏÞÖ´ÐÐÏÂ³öÏÖÎÊÌâ
+:: rem å’Œ :: æ˜¯æ³¨é‡Š
+:: echoè¡¨ç¤ºè¾“å‡ºåˆ°æŽ§åˆ¶å°ï¼Œoffè¡¨ç¤ºå‘½ä»¤æœ¬èº«ä¸è¾“å‡ºåˆ°æŽ§åˆ¶å°
+:: @æ˜¯ä¸è®©æœ¬è¡Œå‘½ä»¤è¾“å‡ºåˆ°æŽ§åˆ¶å°
+:: set è®¾ç½®å˜é‡ï¼Œ ä½¿ç”¨å˜é‡éœ€è¦%%åŒ…èµ·æ¥, =å‰åŽä¸èƒ½æœ‰ç©ºæ ¼
+:: å¤–éƒ¨å‚æ•°ä¼ é€’åˆ°batå†…éƒ¨ï¼Œbatå†…éƒ¨ä½¿ç”¨%1 ~ %9æŽ¥æ”¶ï¼Œæœ€å¤š9ä¸ªå‚æ•°, %0åˆ™æ˜¯æ‰¹å¤„ç†æ–‡ä»¶æœ¬èº«
+:: %cd% è¡¨ç¤ºæ‰§è¡Œbatæ–‡ä»¶æ—¶æ‰€åœ¨è·¯å¾„ï¼Œ æ¯”å¦‚Eç›˜ä¸‹æ‰§è¡ŒFç›˜ä¸‹çš„ä¸€ä¸ªbatæ–‡ä»¶ï¼Œ cdæ˜¾ç¤ºä¸ºE
+:: %~dp0 å½“å‰æ‰§è¡Œçš„batæ‰€åœ¨çš„è·¯å¾„ï¼Œä¸åŒ…æ‹¬batå,ä¹Ÿå°±æ˜¯Fç›˜
+:: æŽ¨è %~dp0ï¼Œ%cd%ç»å¸¸åœ¨ç®¡ç†å‘˜æƒé™æ‰§è¡Œä¸‹å‡ºçŽ°é—®é¢˜
 
-:: Ä³Ð©Çé¿öÏÂÖ´ÐÐbatÎÄ¼þÐèÒª¹ÜÀíÔ±È¨ÏÞ£¬µ«ÊÇÎÒÃÇ²»¿ÉÄÜÃ¿´Î¶¼ÓÒ¼ü¹ÜÀíÔ±ÔËÐÐ£¬ÕâÀï½â¾ö·½°¸£ºhttps://www.jb51.net/article/193692.htm
+:: æŸäº›æƒ…å†µä¸‹æ‰§è¡Œbatæ–‡ä»¶éœ€è¦ç®¡ç†å‘˜æƒé™ï¼Œä½†æ˜¯æˆ‘ä»¬ä¸å¯èƒ½æ¯æ¬¡éƒ½å³é”®ç®¡ç†å‘˜è¿è¡Œï¼Œè¿™é‡Œè§£å†³æ–¹æ¡ˆï¼šhttps://www.jb51.net/article/193692.htm
 
 :: https://blog.csdn.net/albertsh/article/details/52807345
 :: https://www.cnblogs.com/xpwi/p/9626959.html
-:: ÉÏÒ»¼¶Ä¿Â¼¾ÍÖ±½Óºó½Ó\..\¼´¿É£¬ÊÇ×Ö·û´®Á¬½ÓµÄÒ»²¿·Ö£¬ÀýÈç set parentPath=%cd%%\..\
+:: ä¸Šä¸€çº§ç›®å½•å°±ç›´æŽ¥åŽæŽ¥\..\å³å¯ï¼Œæ˜¯å­—ç¬¦ä¸²è¿žæŽ¥çš„ä¸€éƒ¨åˆ†ï¼Œä¾‹å¦‚ set parentPath=%cd%%\..\
 
 @echo off
 
-:: »ñÈ¡¹ÜÀíÔ±È¨ÏÞ£¬µ«ÊÇÒýÆðÁËºÜ¶àµÄ²ÎÊý´«µÝµÄÎÊÌâ
-:: %1 mshta vbscript:CreateObject(¡°Shell.Application¡±).ShellExecute(¡°cmd.exe¡±,"/c %~s0 ::","",¡°runas¡±,1)(window.close)&&exit
+:: èŽ·å–ç®¡ç†å‘˜æƒé™ï¼Œä½†æ˜¯å¼•èµ·äº†å¾ˆå¤šçš„å‚æ•°ä¼ é€’çš„é—®é¢˜
+:: %1 mshta vbscript:CreateObject(â€œShell.Applicationâ€).ShellExecute(â€œcmd.exeâ€,"/c %~s0 ::","",â€œrunasâ€,1)(window.close)&&exit
 
 set src=%1
 set dest=%2
 
 echo source: %src%
-echo destination£º%dest%
+echo destinationï¼š%dest%
 
-:: Èç¹ûdestÎÄ¼þÒÑ¾­´æÔÚ£¬ÔòÏÈÉ¾³ýÀÏµÄ
+:: å¦‚æžœdestæ–‡ä»¶å·²ç»å­˜åœ¨ï¼Œåˆ™å…ˆåˆ é™¤è€çš„
 if exist %dest% (
 	del %dest%
 )
 
-:: ÈíÁ¬½Ó ºÍ ¿ì½Ý·½Ê½ ²»ÊÇÒ»¸ö¶«Î÷£¬ ±ÈÈçÒ»¸öÒÀÀµÆäËûdllµÄexe´´½¨µÄÈíÁ¬½Ó¾Í²»ÄÜ¶ÀÁ¢Ö´ÐÐ
-:: mklink Ä¬ÈÏ²úÉúÎÄ¼þµÄÈíÁ¬½Ó£¬ mklink /?°ïÖú
+:: è½¯è¿žæŽ¥ å’Œ å¿«æ·æ–¹å¼ ä¸æ˜¯ä¸€ä¸ªä¸œè¥¿ï¼Œ æ¯”å¦‚ä¸€ä¸ªä¾èµ–å…¶ä»–dllçš„exeåˆ›å»ºçš„è½¯è¿žæŽ¥å°±ä¸èƒ½ç‹¬ç«‹æ‰§è¡Œ
+:: mklink é»˜è®¤äº§ç”Ÿæ–‡ä»¶çš„è½¯è¿žæŽ¥ï¼Œ mklink /?å¸®åŠ©
 :: mklink %dest% %src%
 
-:: ¿ì½Ý·½Ê½ https://superuser.com/questions/455364/how-to-create-a-shortcut-using-a-batch-script
+:: å¿«æ·æ–¹å¼ https://superuser.com/questions/455364/how-to-create-a-shortcut-using-a-batch-script
 set SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
 
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
 echo sLinkFile = "%dest%.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%src%" >> %SCRIPT%
-echo oLink.Description = "¿ì½Ý·½Ê½"
+echo oLink.Description = "å¿«æ·æ–¹å¼"
 echo oLink.Save >> %SCRIPT%
 
 cscript /nologo %SCRIPT%
