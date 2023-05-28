@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelExporterUI", "ExcelExporterUI.csproj", "{B97390B3-58E9-4AED-A495-64F181EEDADC}"
 EndProject
@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SVN", "..\SVN\SVN.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelExporter", "..\ExcelExporter\ExcelExporter.csproj", "{A9FCC7EC-1ACE-44B0-9197-0617629BDFE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryOperator", "..\BinaryOperator\BinaryOperator.csproj", "{AC0BC26D-37AF-4438-9A02-2C7D7F4B2E03}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpOperator", "..\CSharpOperator\CSharpOperator.csproj", "{DFC177D5-8642-48C9-AD67-EE8C94980A8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CppOperator", "..\CppOperator\CppOperator.csproj", "{BBE8E493-09CA-4438-8C09-3F5865397CA4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryOperator", "..\BinaryOperator\BinaryOperator.csproj", "{81049660-3243-4E85-BB52-F4E60E64F5E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{A9FCC7EC-1ACE-44B0-9197-0617629BDFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9FCC7EC-1ACE-44B0-9197-0617629BDFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9FCC7EC-1ACE-44B0-9197-0617629BDFE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC0BC26D-37AF-4438-9A02-2C7D7F4B2E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC0BC26D-37AF-4438-9A02-2C7D7F4B2E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC0BC26D-37AF-4438-9A02-2C7D7F4B2E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC0BC26D-37AF-4438-9A02-2C7D7F4B2E03}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFC177D5-8642-48C9-AD67-EE8C94980A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFC177D5-8642-48C9-AD67-EE8C94980A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC177D5-8642-48C9-AD67-EE8C94980A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{BBE8E493-09CA-4438-8C09-3F5865397CA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBE8E493-09CA-4438-8C09-3F5865397CA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBE8E493-09CA-4438-8C09-3F5865397CA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81049660-3243-4E85-BB52-F4E60E64F5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81049660-3243-4E85-BB52-F4E60E64F5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81049660-3243-4E85-BB52-F4E60E64F5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81049660-3243-4E85-BB52-F4E60E64F5E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
